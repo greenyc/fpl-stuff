@@ -53,6 +53,7 @@ const PRINT_GAMES = true;
         let score = 999;
         let result = "NO RESULT";
         let teamStrength = 0;
+
         teamGroup.teams.forEach((team) => {
           const game = fixtureGroup.find(
             (fixture) =>
@@ -116,8 +117,7 @@ const PRINT_GAMES = true;
           // if always one team picked, can we exclude the other team? how do we then remove dupe groups
           // e.g. at GW 2, chels+spurs, chels+man_u => chels, chels so will appear twice, use set on final results?
           log(
-            `Team group containing ${teamNames.join(", ")} run starting on GW${
-              gwStartIndex + 1
+            `Team group containing ${teamNames.join(", ")} run starting on GW${gwStartIndex + 1
             }.`
           );
 
