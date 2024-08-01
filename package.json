@@ -1,12 +1,12 @@
 {
-  "name": "fpl",
+  "name": "fpl-stuff",
   "version": "1.0.0",
-  "description": "Bootstrap API: `https://fantasy.premierleague.com/api/bootstrap-static/`\r Fixture API: `https://fantasy.premierleague.com/api/fixtures/?future=1`",
+  "description": "FPL Ramblings",
   "main": "index.js",
   "scripts": {
     "dev": "npx tsc && cd dist && node index.js"
   },
-  "author": "",
+  "author": "Ciaran Green",
   "license": "ISC",
   "devDependencies": {
     "@types/lodash.chunk": "^4.2.9",
