@@ -1,6 +1,5 @@
 global.debug = true;
 import chunk from "lodash.chunk";
-import cloneDeep from "lodash.clonedeep";
 import type { Fixture, Team, TeamGroup } from "./types";
 import { getFixtures, getTeams } from "./api";
 import { log, logTime } from "./utils";
@@ -18,11 +17,13 @@ const PRINT_GAMES = true;
     logTime("start");
   }
 
-  const originalTeams = await getTeams();
+  const teams = await getTeams() as Team[];
   const fixtures = await getFixtures();
 
   const startingGw = 0;
   const endingGw = 38;
+
+  let teamCombos = nChooseK(teams, NUM_TEAMS_IN_GROUP) as Team[][];
 
   for (
     let gwIndex = startingGw;
@@ -34,9 +35,6 @@ const PRINT_GAMES = true;
       gwIndex,
       gwIndex + GW_CONSIDERED
     );
-
-    let teams = cloneDeep(originalTeams) as Team[];
-    let teamCombos = nChooseK(teams, NUM_TEAMS_IN_GROUP) as Team[][];
 
     let teamGroups = getTeamGroups(teamCombos);
 
