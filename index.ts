@@ -3,13 +3,12 @@ import chunk from "lodash.chunk";
 import type { Fixture, Team, TeamGroup } from "./types";
 import { getFixtures, getTeams } from "./api";
 import { log, logTime } from "./utils";
-import { getTeamGroups, nChooseK } from "./core";
+import { getTeamGroups, nChooseK, printResults } from "./core";
 
 // TODO: Add GW to start on
-const GW_CONSIDERED = 6;
+const GW_GROUP_SIZE = 6;
 const MIN_SCORE = 2;
 const NUM_TEAMS_IN_GROUP = 1;
-const PRINT_GAMES = true;
 
 (async () => {
   if (global.debug) {
@@ -27,13 +26,13 @@ const PRINT_GAMES = true;
 
   for (
     let gwIndex = startingGw;
-    gwIndex <= endingGw - GW_CONSIDERED;
+    gwIndex <= endingGw - GW_GROUP_SIZE;
     gwIndex++
   ) {
     const chunkedFixtures = chunk(fixtures, 10) as Fixture[][];
     const consideredFixtures = chunkedFixtures.slice(
       gwIndex,
-      gwIndex + GW_CONSIDERED
+      gwIndex + GW_GROUP_SIZE
     );
 
     let teamGroups = getTeamGroups(teamCombos);
@@ -80,25 +79,7 @@ const PRINT_GAMES = true;
       });
     });
 
-    teamGroups.forEach((teamGroup: TeamGroup) => {
-      if (teamGroup.score && teamGroup.score <= MIN_SCORE * GW_CONSIDERED) {
-        const teamNames = teamGroup.teams.map((x) => x.name);
-        // if always one team picked, can we exclude the other team? how do we then remove dupe groups
-        // e.g. at GW 2, chels+spurs, chels+man_u => chels, chels so will appear twice, use set on final results?
-        log(
-          `Team group containing ${teamNames.join(", ")} run starting on GW${
-            gwIndex + 1
-          }.`
-        );
-
-        if (PRINT_GAMES) {
-          teamGroup.bestGameweekTeam.forEach((gameweekResult) => {
-            log(gameweekResult);
-          });
-          log("---");
-        }
-      }
-    });
+    printResults(teamGroups, MIN_SCORE, gwIndex, GW_GROUP_SIZE)
   }
 
   if (global.debug) {
